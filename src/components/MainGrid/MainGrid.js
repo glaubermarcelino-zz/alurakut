@@ -9,6 +9,7 @@ margin-left: auto;
 margin-right: auto;
 max-width: 500px;
 
+
 .profileArea{
   display: none;
   @media(min-width:860px){
