@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 
 const Box = styled.div`
-  background: #fff;
+  background: rgb(202 182 120 / 30%);
   border-radius:8px;
   padding: 16px;
   margin-bottom:10px;
+  
   overflow-y: scroll;
     overflow: overlay;
 

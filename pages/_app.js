@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
 
-    background:#D9E6F6;
+    background:rgb(226 226 228);
     font-family: sans-serif;
   }
 
