@@ -47,8 +47,8 @@ hr{
     color:#333333;
     border:0;
     padding:14px 16px;
-    padding-bottom: 14px;
-    border-radius: 100%;
+    margin-bottom: 14px;
+    border-radius: 10000px;
 
     ::placeholder{
       color:#333333;
@@ -60,7 +60,7 @@ hr{
     border:0;
     padding: 8px 12px;
     color:#FFFFFF;
-    border-radius: 100%;
+    border-radius: 10000px;
     background-color: #6F92BB;
   }
 `;
