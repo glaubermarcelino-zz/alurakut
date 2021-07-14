@@ -5,7 +5,7 @@ const ProfileSideBar = (user) => {
   return (
     <Box>
       <>
-        <img src={`https://www.github.com/${user.githubUser}.png`} style={{ borderRadius: '8px' }} />
+        <img src={`https://www.github.com/${user.githubUser}.png`} style={{ borderRadius: '60px' }} />
 
         <hr />
         <p>
