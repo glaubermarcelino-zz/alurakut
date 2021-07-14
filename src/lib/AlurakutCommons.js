@@ -227,7 +227,7 @@ export function AlurakutProfileSidebarMenuDefault() {
 AlurakutProfileSidebarMenuDefault.Wrapper = styled.div`
   a {
     font-size: 12px;
-    color: #2E7BB4;
+    color: #e4bb69;
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -295,7 +295,7 @@ OrkutNostalgicIconSet.List = styled.ul`
   flex-wrap: wrap;
   li {
     font-size: 12px;
-    color: #5A5A5A;
+    color: #e4bb69;
     display: grid;
     grid-template-areas:
       "title title"

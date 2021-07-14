@@ -3,7 +3,7 @@ import { AlurakutProfileSidebarMenuDefault } from '../../lib/AlurakutCommons';
 
 const ProfileSideBar = (user) => {
   return (
-    <Box>
+    <Box as="aside">
       <>
         <img src={`https://www.github.com/${user.githubUser}.png`} style={{ borderRadius: '60px' }} />
 

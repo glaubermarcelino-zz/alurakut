@@ -11,7 +11,13 @@ const GlobalStyle = createGlobalStyle`
 
   body {
 
-    background:rgb(226 226 228);
+    /* background:rgb(226 226 228);
+     */
+    background: url(https://wallpaperaccess.com/full/29822.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
     font-family: sans-serif;
   }
 

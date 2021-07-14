@@ -1,17 +1,14 @@
 import styled from 'styled-components';
 
 const Box = styled.div`
-  background: rgb(202 182 120 / 30%);
+  background: rgb(202 159 120 / 52%);
   border-radius:8px;
   padding: 16px;
   margin-bottom:10px;
-  
-  overflow-y: scroll;
-    overflow: overlay;
 
   .boxLink{
     font-size: 14px;
-    color:#2E7B84;
+    color:#e4bb69;
     text-decoration: none;
     font-weight: 800;
   }
