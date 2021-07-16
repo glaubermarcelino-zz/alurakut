@@ -9,15 +9,12 @@ export default function LoginScreen() {
 
   const handleLoginGitHub = (event) => {
     event.preventDefault();
-    fetch('https://alurakut.vercel.app/api/login',{
-      method:'POST',
-      headers:{
-        "Content-Type'":"application/json",
-      },
-      body:JSON.stringify({githubUser:userGithub})
-    }).then(async (respostaDoServer) =>{
-      const dadosDaResposta = await respostaDoServer.json()
-      const token = dadosDaResposta.token;
+    const user = JSON.stringify({githubUser:userGithub});
+
+    axios.post('https://alurakut.vercel.app/api/login',user)
+    .then(respostaDoServer =>{
+      const dadosDaResposta =  respostaDoServer;
+      const token = dadosDaResposta.data.token;
       nookies.set(null, 'USER_TOKEN', token, {
           path: '/',
           maxAge: 86400 * 7 
@@ -47,9 +44,10 @@ export default function LoginScreen() {
               Acesse agora mesmo com seu usuário do <strong>GitHub</strong>!
             </p>
             <input placeholder="Usuário" value={userGithub} onChange={(e) => setUserGitHub(e.target.value)} />
-            <button onClick={(e) => handleLoginGitHub(e)}>
+            <button onClick={(e) => handleLoginGitHub(e)} disabled={!userGithub.length > 0}>
               Login
             </button>
+
           </form>
 
           <footer className="box">

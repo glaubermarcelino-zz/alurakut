@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import {useRouter} from 'next/router';
+import nookies from 'nookies';
 
 import Box from '../src/components/Box/Box';
 import BoxGroup from '../src/components/BoxGroup';
@@ -12,7 +12,7 @@ import { http } from '../src/services/http';
 
 
 export default function Home() {
-  const githubUser = "glaubermarcelino";
+  const githubUser = nookies.get(null).USER;
   const [seguidores, setSeguidores] = useState(null);
   const [comunidades, setComunidades] = useState([]);
   const [title, setTitle] = useState('')
@@ -41,7 +41,7 @@ export default function Home() {
         setSeguidores(remapSeguidor);
       });
     handleObterComunidades();
-  }, []);
+  }, [githubUser]);
 
   const handleCriarComunidade = async (event) => {
     event.preventDefault();
