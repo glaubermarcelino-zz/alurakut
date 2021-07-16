@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React,{useState} from 'react';
+=======
+import React from 'react';
+>>>>>>> a37e67326ec1e9e695ac7318dd58b1cb2f1715f6
 
 export default function LoginScreen() {
   const [userGithub,setUserGitHub] = useState('');
@@ -19,9 +23,13 @@ export default function LoginScreen() {
             <p>
               Acesse agora mesmo com seu usuário do <strong>GitHub</strong>!
           </p>
+<<<<<<< HEAD
             <input placeholder="Usuário" 
             value={userGithub} 
             onChange={(e) => setUserGitHub(e.target.value)}/>
+=======
+            <input placeholder="Usuário" value={userGithub} onChange={(e) => setUserGitHub(e.target.value)}/>
+>>>>>>> a37e67326ec1e9e695ac7318dd58b1cb2f1715f6
             <button type="submit">
               Login
           </button>
