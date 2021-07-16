@@ -11,28 +11,20 @@ import { http } from '../src/services/http';
 
 
 export default function Home() {
-
   const githubUser = 'glaubermarcelino';
   const [seguidores, setSeguidores] = useState(null);
-  const [comunidades, setComunidades] = useState([
-    { id: 1, nome: "CSharp", avatar: "https://growiz.com.br/wp-content/uploads/2020/08/kisspng-c-programming-language-avatar-microsoft-visual-stud-atlas-portfolio-5b899192d7c600.1628571115357423548838.png",url:"" },
-    { id: 2, nome: "Postgres", avatar: "https://www.cyclonis.com/images/2018/10/1_7AOhGDnRL2eyJMUidCHZEA-765x383.jpg" },
-    { id: 3, nome: "Morre Praga", avatar: "https://s2.glbimg.com/6C8iXLc146uY7UcX1kbDiprbD3k=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_bc8228b6673f488aa253bbcb03c80ec5/internal_photos/bs/2021/5/v/YTfYLvSdm55eJTuZxCNg/memes-phoenix-force-mundial-free-fire-ffws-2021.jpeg",url:"" },
-    { id: 4, nome: "Vercel", avatar: "https://res.cloudinary.com/practicaldev/image/fetch/s--UajhAYy4--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/emsbo1jy8jh91vvohwrj.jpeg",url:"" },
-    { id: 5, nome: "ReactJS", avatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",url:"" }
-  ]);
+  const [comunidades, setComunidades] = useState([]);
   const [title, setTitle] = useState('')
   const [urlImage, setUrlImage] = useState('')
   const [urlComunidade, setUrlComunidade] = useState('')
-  const pessoalFavoritas = [{ id: 1, nome: "juunegreiros", avatar: "https://www.github.com/juunegreiros.png" },
-  { id: 2, nome: "omariosouto", avatar: "https://www.github.com/omariosouto.png" },
-  { id: 3, nome: "rafaballerini", avatar: "https://www.github.com/rafaballerini.png" },
-  { id: 4, nome: "marcobrunodev", avatar: "https://www.github.com/marcobrunodev.png" },
-  { id: 5, nome: "felipefialho", avatar: "https://www.github.com/felipefialho.png" }];
+  const pessoalFavoritas = [{ id: 1, nome: "juunegreiros", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/juunegreiros.png` },
+  { id: 2, nome: "omariosouto", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/omariosouto.png` },
+  { id: 3, nome: "rafaballerini", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/rafaballerini.png` },
+  { id: 4, nome: "marcobrunodev", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/marcobrunodev.png` },
+  { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
 
   useEffect(() => {
     const remapSeguidor = [];
-
     http.get(`/${githubUser}/followers`)
       .then((response) => {
         if (response.data) {
@@ -47,29 +39,80 @@ export default function Home() {
           })
         }
         setSeguidores(remapSeguidor);
-      })
-  }, [])
+      });
+    handleObterComunidades();
+  }, []);
 
-  function handleCriarComunidade(event) {
+  const handleCriarComunidade = async (event) => {
     event.preventDefault();
-    const imageDefault = `https://picsum.photos/id/1/200/300?${new Date().toISOString()}`;
-    console.log(imageDefault);
-
-
-    if (title) {
-      setComunidades([...comunidades, {
-        id: new Date().toISOString(),
-        nome: title,
-        avatar: urlImage === undefined ? imageDefault: urlImage,
-        urlComunidade: urlComunidade
-      }]);
-      setTitle('');
-      setUrlImage('');
-      toast.success("Comunidade inserida com sucesso!")
-
-    } else {
-      toast.error("Informe os dados da comunidade");
+    const dados = {
+      title: title,
+      url_comunidade: urlComunidade,
+      image_url: urlImage
     }
+    await fetch('/api/comunidades', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dados)
+    }).then(async (response) => {
+      const dadosretornados = await response.json();
+      const { createdAt, id, imageUrl, title, urlComunidade } = dadosretornados.registroCriado;
+      
+          toast.success("Comunidade inserida com sucesso!")
+        const retorno = {
+          data: createdAt,
+          id: id,
+          avatar: imageUrl,
+          nome: title,
+          urlComunidade: urlComunidade
+        }
+        setComunidades([...comunidades, retorno])
+    })
+      .catch(erro => toast.error(`Ocorreu um erro ao cadastrar a comunidade ${erro}`))
+    setTitle('');
+    setUrlImage('');
+    setUrlComunidade('');
+
+  }
+
+  async function handleObterComunidades() {
+    const filter = JSON.stringify({
+      query: `query{
+      allCommunities {
+        id
+        imageUrl
+        title
+        urlComunidade
+        updatedAt
+      }
+    }
+    `})
+
+    fetch('https://graphql.datocms.com/', {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${process.env.NEXT_PUBLIC_TOKEN_DATOCMS_READONLY}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: filter
+    }).then((data) => data.json())
+      .then((response) => {
+        const remap = [];
+        response.data.allCommunities.map((item) => {
+          remap.push({
+            data: item.updatedAt,
+            id: item.id,
+            avatar: item.imageUrl,
+            nome: item.title,
+            urlComunidade: item.urlComunidade,
+            tipo: 'comunidades'
+          });
+        })
+        setComunidades(remap)
+      });
   }
 
   return (
@@ -126,7 +169,7 @@ export default function Home() {
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
-          {seguidores && <BoxGroup data={seguidores} title="Seguidores" tipo="seguidores"/>}
+          {seguidores && (<BoxGroup data={seguidores} title="Seguidores" tipo="seguidores" />)}
           {pessoalFavoritas && <BoxGroup data={pessoalFavoritas} title="Pessoas da Comunidade" tipo="pessoalcomunidade" />}
           {comunidades && <BoxGroup data={comunidades} title="Comunidades" tipo="comunidades" />}
         </div>

@@ -1,5 +1,8 @@
 import axios from 'axios';
-//https://api.github.com/users/joellobo/followers
 export const http = axios.create({
-    baseURL: 'https://api.github.com/users/',
+    baseURL: `${process.env.NEXT_PUBLIC_GITHUB_API}/users/`,
+    headers: {
+        "Content-Type": "application/json",
+        "Accept":"application/json"
+    }
 });
