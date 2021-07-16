@@ -18,7 +18,9 @@
     <img alt="Stargazers" src="https://img.shields.io/github/stars/glaubermarcelino/alurakut">
   </a>
 </p>
-
+<p align="center"> 
+  <img src="https://github.com/glaubermarcelino/alurakut/blob/main/screens/login.png?raw=true" alt="Login AluraKut" /> 
+</p>
 <p align="center"> 
   <img src="https://github.com/glaubermarcelino/alurakut/blob/main/screens/alurakut.png?raw=true" alt="AluraKut" /> 
 </p>
