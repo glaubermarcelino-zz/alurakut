@@ -10,18 +10,20 @@ export default function LoginScreen() {
   const router = useRouter();
 
 
-  const handleUsuarioGithubExiste = async (usuario) => {
-    axios.get(`${process.env.NEXT_PUBLIC_GITHUB_API}/users/${usuario}`)
-    .then(async (response) =>{
-        if(await response.status == 200){
-          setUsuarioExiste(true);
+  const handleUsuarioGithubExiste = (usuario) => {
+    const resultado = axios.get(`${process.env.NEXT_PUBLIC_GITHUB_API}/users/${usuario}`)
+    .then((response) =>{
+        if(response.status == 200){
+          return true;
         }
-    }).catch(erro => setUsuarioExiste(false))
-   return usuarioExiste;
+    }).catch(erro => false)
+    return resultado;
   }
   const handleLoginGitHub = async (event) => {
     event.preventDefault();
-    if (handleUsuarioGithubExiste(userGithub)) {
+    const usuarioGithubExiste = await handleUsuarioGithubExiste(userGithub);
+
+    if (usuarioGithubExiste===true) {
       const user = { githubUser: userGithub };
 
       fetch('https://alurakut.vercel.app/api/login', {
@@ -39,7 +41,7 @@ export default function LoginScreen() {
             maxAge: 86400 * 7
           })
           router.push('/')
-        }).catch(erro => console.log(erro)
+        }).catch(erro => toast.error(`Ocorreu um erro ${errp}`)
         )
     } else {
       toast.error(`Usuário inválido!`);
