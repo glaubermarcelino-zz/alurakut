@@ -10,29 +10,31 @@ export default function LoginScreen() {
   const router = useRouter();
 
 
-  const handleUsuarioGithubExiste = (usuario) => {
+  const handleUsuarioGithubExiste = async (usuario) => {
     axios.get(`${process.env.NEXT_PUBLIC_GITHUB_API}/users/${usuario}`)
-    .then((response) =>{
-        if(response.status == 200){
+    .then(async (response) =>{
+        if(await response.status == 200){
           setUsuarioExiste(true);
         }
     }).catch(erro => setUsuarioExiste(false))
    return usuarioExiste;
   }
-  const handleLoginGitHub = (event) => {
+  const handleLoginGitHub = async (event) => {
     event.preventDefault();
     if (handleUsuarioGithubExiste(userGithub)) {
-      const user = JSON.stringify({ githubUser: userGithub });
+      const user = { githubUser: userGithub };
 
-      axios.post('https://alurakut.vercel.app/api/login', user)
-        .then(respostaDoServer => {
-          const dadosDaResposta = respostaDoServer;
-          const token = dadosDaResposta.data.token;
+      fetch('https://alurakut.vercel.app/api/login', {
+        method:'POST',
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify(user)
+      })
+        .then(async respostaDoServer => {
+          const dadosDaResposta = await respostaDoServer.json();
+          const token = await dadosDaResposta.token;
           nookies.set(null, 'USER_TOKEN', token, {
-            path: '/',
-            maxAge: 86400 * 7
-          })
-          nookies.set(null, 'USER', userGithub, {
             path: '/',
             maxAge: 86400 * 7
           })

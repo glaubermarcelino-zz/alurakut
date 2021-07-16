@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import nookies from 'nookies';
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
+import jwt from 'jsonwebtoken';
 
 import Box from '../src/components/Box/Box';
 import BoxGroup from '../src/components/BoxGroup';
@@ -12,21 +13,24 @@ import { AlurakutMenu, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons'
 import { http } from '../src/services/http';
 
 
-export default function Home() {
-  const githubUser = nookies.get(null).USER;
+export default function Home(props) {
+  const githubUser = props.githubUser;
   const router = useRouter();
+
   const [seguidores, setSeguidores] = useState(null);
   const [comunidades, setComunidades] = useState([]);
   const [title, setTitle] = useState('')
   const [urlImage, setUrlImage] = useState('')
   const [urlComunidade, setUrlComunidade] = useState('')
+
   const pessoalFavoritas = [{ id: 1, nome: "juunegreiros", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/juunegreiros.png` },
   { id: 2, nome: "omariosouto", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/omariosouto.png` },
   { id: 3, nome: "rafaballerini", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/rafaballerini.png` },
   { id: 4, nome: "marcobrunodev", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/marcobrunodev.png` },
   { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
+
   useEffect(() => {
-    if(!githubUser)router.push('/login');
+    if (!githubUser) router.push('/login');
 
     const remapSeguidor = [];
     http.get(`/${githubUser}/followers`)
@@ -63,16 +67,16 @@ export default function Home() {
     }).then(async (response) => {
       const dadosretornados = await response.json();
       const { createdAt, id, imageUrl, title, urlComunidade } = dadosretornados.registroCriado;
-      
-          toast.success("Comunidade inserida com sucesso!")
-        const retorno = {
-          data: createdAt,
-          id: id,
-          avatar: imageUrl,
-          nome: title,
-          urlComunidade: urlComunidade
-        }
-        setComunidades([...comunidades, retorno])
+
+      toast.success("Comunidade inserida com sucesso!")
+      const retorno = {
+        data: createdAt,
+        id: id,
+        avatar: imageUrl,
+        nome: title,
+        urlComunidade: urlComunidade
+      }
+      setComunidades([...comunidades, retorno])
     })
       .catch(erro => toast.error(`Ocorreu um erro ao cadastrar a comunidade ${erro}`))
     setTitle('');
@@ -180,4 +184,26 @@ export default function Home() {
       </MainGrid>
     </>
   )
+}
+
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context);
+  const token = cookies.USER_TOKEN;
+  const { githubUser } = jwt.decode(token);
+
+  fetch('https://alurakut.vercel.app/api/auth', {
+    headers: {
+      "Authorization": token
+    }
+  }).then((response) => response.json())
+    .then((resultado) => {
+      console.log(resultado);
+    })
+
+  return {
+    props: {
+      githubUser,
+      token
+    }
+  }
 }
