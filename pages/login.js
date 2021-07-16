@@ -3,20 +3,18 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import nookies from 'nookies';
 
-// import LoginGithub from '../node_modules/react-login-github/dist';
-
 export default function LoginScreen() {
   const [userGithub, setUserGitHub] = useState('');
   const router = useRouter();
 
   const handleLoginGitHub = (event) => {
     event.preventDefault();
-    axios.post('https://alurakut.vercel.app/api/login',JSON.stringify({githubUser:userGithub}),{
+    fetch('https://alurakut.vercel.app/api/login',{
+      method:'POST',
       headers:{
         "Content-Type'":"application/json",
-        "Access-Control-Allow-Origin":"*",
-        "Access-Control-Allow-Headers":"*"
-      }
+      },
+      body:JSON.stringify({githubUser:userGithub})
     }).then(async (respostaDoServer) =>{
       const dadosDaResposta = await respostaDoServer.json()
       const token = dadosDaResposta.token;
@@ -31,22 +29,9 @@ export default function LoginScreen() {
       router.push('/')
     }).catch(erro => console.log(erro)
     )
-    
-
-
-  }
-  const onSuccess = (data) => {
-    console.log(data);
-  }
-  const onFailure = (data) =>{
-    console.log(data);
   }
   return (
     <main style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-{/* <LoginGithub clientId="0b801adee1878597dfbd"
-    onSuccess={onSuccess}
-    onFailure={onFailure}/> */}
-
       <div className="loginScreen">
         <section className="logoArea">
           <img src="https://alurakut.vercel.app/logo.svg" />
