@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import nookies from 'nookies';
+import {useRouter} from 'next/router';
 
 import Box from '../src/components/Box/Box';
 import BoxGroup from '../src/components/BoxGroup';
@@ -13,6 +14,7 @@ import { http } from '../src/services/http';
 
 export default function Home() {
   const githubUser = nookies.get(null).USER;
+  const router = useRouter();
   const [seguidores, setSeguidores] = useState(null);
   const [comunidades, setComunidades] = useState([]);
   const [title, setTitle] = useState('')
@@ -24,6 +26,8 @@ export default function Home() {
   { id: 4, nome: "marcobrunodev", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/marcobrunodev.png` },
   { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
   useEffect(() => {
+    if(!githubUser)router.push('/login');
+
     const remapSeguidor = [];
     http.get(`/${githubUser}/followers`)
       .then((response) => {
