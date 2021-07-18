@@ -84,7 +84,8 @@ export default function Home(props) {
         id: id,
         avatar: imageUrl,
         nome: title,
-        urlComunidade: urlComunidade
+        urlComunidade: urlComunidade,
+        sluguser: githubUser
       }
       setComunidades([...comunidades, retorno])
     })
@@ -98,12 +99,13 @@ export default function Home(props) {
   async function handleObterComunidades() {
     const filter = JSON.stringify({
       query: `query{
-      allCommunities {
+        allCommunities(filter: {sluguser: {eq: "${githubUser}"}}) {
         id
         imageUrl
         title
         urlComunidade
         updatedAt
+        sluguser
       }
     }
     `})
