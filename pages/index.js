@@ -68,7 +68,8 @@ export default function Home(props) {
     const dados = {
       title: title,
       url_comunidade: urlComunidade,
-      image_url: urlImage
+      image_url: urlImage,
+      sluguser: githubUser
     }
     await fetch('/api/comunidades', {
       method: 'POST',
@@ -78,7 +79,7 @@ export default function Home(props) {
       body: JSON.stringify(dados)
     }).then(async (response) => {
       const dadosretornados = await response.json();
-      const { createdAt, id, imageUrl, title, urlComunidade } = dadosretornados.registroCriado;
+      const { createdAt, id, imageUrl, title, urlComunidade,sluguser } = dadosretornados.registroCriado;
 
       toast.success("Comunidade inserida com sucesso!")
       const retorno = {
@@ -87,7 +88,7 @@ export default function Home(props) {
         avatar: imageUrl,
         nome: title,
         urlComunidade: urlComunidade,
-        sluguser: githubUser
+        githubUser: sluguser
       }
       setComunidades([...comunidades, retorno])
     })
