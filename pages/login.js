@@ -22,7 +22,7 @@ export default function LoginScreen() {
     event.preventDefault();
     const usuarioGithubExiste = await handleUsuarioGithubExiste(userGithub);
 
-    if (usuarioGithubExiste===true) {
+    // if (usuarioGithubExiste===true) {
       const user = { githubUser: userGithub };
 
       fetch('https://alurakut.vercel.app/api/login', {
@@ -42,9 +42,10 @@ export default function LoginScreen() {
           router.push('/')
         }).catch(erro => toast.error(`Ocorreu um erro ${errp}`)
         )
-    } else {
-      toast.error(`Usuário inválido!`);
-    }
+  } 
+    // else {
+    //   toast.error(`Usuário inválido!`);
+    // }
   }
   return (
     <main style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
