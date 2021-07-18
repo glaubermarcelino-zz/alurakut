@@ -6,10 +6,10 @@ const BoxGroup = (props) => {
     <Box>
       <ProfileRelationsBoxWrapper>
         <h2 className="smallTitle">
-          {`${props.title} (${props.data.length})`}
+          {`${props.title} (${props.data?.length>0 ? props.data.length : 0})`}
         </h2>
         <ul>
-          {props.data.slice(0,6).map((item) => {
+          {props.data?.length>0 && props.data.slice(0,6).map((item) => {
             return (<li key={item.id}>
               <a href={`/${props.tipo}/${item.nome}`}>
                 <img src={item.avatar} />

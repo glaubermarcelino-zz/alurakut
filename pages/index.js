@@ -16,7 +16,7 @@ import { http } from '../src/services/http';
 export default function Home(props) {
   const githubUser = props.githubUser;
 
-  const [seguidores, setSeguidores] = useState(null);
+  const [seguidores, setSeguidores] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [comunidades, setComunidades] = useState([]);
   const [title, setTitle] = useState('')
@@ -47,7 +47,7 @@ export default function Home(props) {
           })
         }
         setSeguidores(remapSeguidor);
-      }).catch(erro => toast.error(`Erro ao carregar seguidores ${erro}`))
+      }).catch(erro => toast.info(`Não foi possível carregar os seguidores`))
     handleObterComunidades();
   }, [githubUser]);
 

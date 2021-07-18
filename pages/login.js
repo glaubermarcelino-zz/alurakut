@@ -20,7 +20,7 @@ export default function LoginScreen() {
   }
   const handleLoginGitHub = async (event) => {
     event.preventDefault();
-    const usuarioGithubExiste = await handleUsuarioGithubExiste(userGithub);
+    // const usuarioGithubExiste = await handleUsuarioGithubExiste(userGithub);
 
     // if (usuarioGithubExiste===true) {
       const user = { githubUser: userGithub };
