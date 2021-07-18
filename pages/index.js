@@ -27,16 +27,18 @@ export default function Home(props) {
   { id: 2, nome: "omariosouto", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/omariosouto.png` },
   { id: 3, nome: "rafaballerini", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/rafaballerini.png` },
   { id: 4, nome: "marcobrunodev", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/marcobrunodev.png` },
-  { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
+    { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
+  
+  const itemsPorPagina = 5;
 
   useEffect(() => {
 
     const remapSeguidor = [];
-    http.get(`/${githubUser}/followers?per_page=6&page=${currentPage}&order=DESC`)
+    http.get(`/${githubUser}/followers?per_page=${itemsPorPagina}&page=${currentPage}&order=DESC`)
       .then((response) => {
         if (response.data) {
           const dados = response.data;
-          console.log(dados);
+          console.log(seguidores);
           dados.map(({ id, login, avatar_url }) => {
             remapSeguidor.push({
               id: id,
@@ -46,20 +48,22 @@ export default function Home(props) {
 
           })
         }
-        setSeguidores(remapSeguidor);
-      }).catch(erro => toast.info(`Não foi possível carregar os seguidores`))
+        setSeguidores((prevFollowers) => [...prevFollowers, ...remapSeguidor]);
+      }).catch(() => toast.info(`Não foi possível carregar os seguidores`))
     handleObterComunidades();
-  }, [githubUser]);
+  }, [currentPage,githubUser]);
 
   useEffect(() => {
     const intersectionObserver = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting)) {
-        setCurrentPage((currentStateInsideState) => currentStateInsideState + 1);
+        setCurrentPage((currentStateInsideState) => {
+          return currentStateInsideState + 1
+        });
       }
     });
     intersectionObserver.observe(document.querySelector('#sentinela'));
     return () => intersectionObserver.disconnect();
-  }, [currentPage])
+  }, [])
 
   const handleCriarComunidade = async (event) => {
     event.preventDefault();
