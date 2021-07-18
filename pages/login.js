@@ -40,9 +40,9 @@ export default function LoginScreen() {
             maxAge: 86400 * 7
           })
           router.push('/')
-        }).catch(erro => toast.error(`Ocorreu um erro ${errp}`)
+        }).catch(erro => toast.error(`Ocorreu um erro ${erro}`)
         )
-  } 
+    // }
     // else {
     //   toast.error(`Usuário inválido!`);
     // }
