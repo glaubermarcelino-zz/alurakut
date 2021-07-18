@@ -29,7 +29,7 @@ export default function Home(props) {
   { id: 4, nome: "marcobrunodev", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/marcobrunodev.png` },
     { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
   
-  const itemsPorPagina = 5;
+  const itemsPorPagina = 29;
 
   useEffect(() => {
 
@@ -51,14 +51,12 @@ export default function Home(props) {
         setSeguidores((prevFollowers) => [...prevFollowers, ...remapSeguidor]);
       }).catch(() => toast.info(`Não foi possível carregar os seguidores`))
     handleObterComunidades();
-  }, [currentPage,githubUser]);
+  }, [currentPage]);
 
   useEffect(() => {
     const intersectionObserver = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting)) {
-        setCurrentPage((currentStateInsideState) => {
-          return currentStateInsideState + 1
-        });
+        setCurrentPage((currentStateInsideState) => currentStateInsideState + 1);
       }
     });
     intersectionObserver.observe(document.querySelector('#sentinela'));
