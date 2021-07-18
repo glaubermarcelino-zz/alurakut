@@ -31,7 +31,6 @@ export default function Home(props) {
   { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
 
   useEffect(() => {
-    if (!githubUser) router.push('/login');
 
     const remapSeguidor = [];
     http.get(`/${githubUser}/followers?per_page=6&page=${currentPage}&order=DESC`)
