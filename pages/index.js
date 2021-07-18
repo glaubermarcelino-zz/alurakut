@@ -14,10 +14,11 @@ import { http } from '../src/services/http';
 
 
 export default function Home(props) {
-  const githubUser = props.githubUser;
+  const githubUser = props.githubUser | undefined;
   const router = useRouter();
 
   const [seguidores, setSeguidores] = useState(null);
+  const [currentPage,setCurrentPage] = useState(1);
   const [comunidades, setComunidades] = useState([]);
   const [title, setTitle] = useState('')
   const [urlImage, setUrlImage] = useState('')
@@ -33,10 +34,11 @@ export default function Home(props) {
     if (!githubUser) router.push('/login');
 
     const remapSeguidor = [];
-    http.get(`/${githubUser}/followers`)
+    http.get(`/${githubUser}/followers?per_page=6&page=${currentPage}&order=DESC`)
       .then((response) => {
         if (response.data) {
           const dados = response.data;
+          console.log(dados);
           dados.map(({ id, login, avatar_url }) => {
             remapSeguidor.push({
               id: id,
@@ -49,8 +51,18 @@ export default function Home(props) {
         setSeguidores(remapSeguidor);
       });
     handleObterComunidades();
-  }, [githubUser]);
+  }, [githubUser,currentPage]);
 
+  useEffect(() => {
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        setCurrentPage((currentStateInsideState)=>currentStateInsideState + 1);
+      }
+    });
+    intersectionObserver.observe(document.querySelector('#sentinela'));
+    return () => intersectionObserver.disconnect();
+  }, [currentPage])
+  
   const handleCriarComunidade = async (event) => {
     event.preventDefault();
     const dados = {
@@ -177,7 +189,7 @@ export default function Home(props) {
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
-          {seguidores && (<BoxGroup data={seguidores} title="Seguidores" tipo="seguidores" />)}
+          {seguidores && (<BoxGroup data={seguidores} title="Seguidores" tipo="seguidores" Pagina={currentPage}/>)}
           {pessoalFavoritas && <BoxGroup data={pessoalFavoritas} title="Pessoas da Comunidade" tipo="pessoalcomunidade" />}
           {comunidades && <BoxGroup data={comunidades} title="Comunidades" tipo="comunidades" />}
         </div>

@@ -17,6 +17,7 @@ const BoxGroup = (props) => {
               </a>
             </li>)
           })}
+          <li id="sentinela" style={{width:'100%',height:'10px',backgroundColor:'red'}}></li>
         </ul>
       </ProfileRelationsBoxWrapper>
     </Box>

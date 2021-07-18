@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 
 export default function LoginScreen() {
   const [userGithub, setUserGitHub] = useState('');
-  const [usuarioExiste, setUsuarioExiste] = useState(false);
   const router = useRouter();
 
 
