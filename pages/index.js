@@ -14,11 +14,10 @@ import { http } from '../src/services/http';
 
 
 export default function Home(props) {
-  const githubUser = props.githubUser | undefined;
-  const router = useRouter();
+  const githubUser = props.githubUser;
 
   const [seguidores, setSeguidores] = useState(null);
-  const [currentPage,setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [comunidades, setComunidades] = useState([]);
   const [title, setTitle] = useState('')
   const [urlImage, setUrlImage] = useState('')
@@ -48,20 +47,20 @@ export default function Home(props) {
           })
         }
         setSeguidores(remapSeguidor);
-      });
+      }).catch(erro => toast.error(`Erro ao carregar seguidores ${erro}`))
     handleObterComunidades();
-  }, [githubUser,currentPage]);
+  }, [githubUser]);
 
   useEffect(() => {
     const intersectionObserver = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting)) {
-        setCurrentPage((currentStateInsideState)=>currentStateInsideState + 1);
+        setCurrentPage((currentStateInsideState) => currentStateInsideState + 1);
       }
     });
     intersectionObserver.observe(document.querySelector('#sentinela'));
     return () => intersectionObserver.disconnect();
   }, [currentPage])
-  
+
   const handleCriarComunidade = async (event) => {
     event.preventDefault();
     const dados = {
@@ -188,7 +187,7 @@ export default function Home(props) {
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
-          {seguidores && (<BoxGroup data={seguidores} title="Seguidores" tipo="seguidores" Pagina={currentPage}/>)}
+          {seguidores && (<BoxGroup data={seguidores} title="Seguidores" tipo="seguidores" Pagina={currentPage} />)}
           {pessoalFavoritas && <BoxGroup data={pessoalFavoritas} title="Pessoas da Comunidade" tipo="pessoalcomunidade" />}
           {comunidades && <BoxGroup data={comunidades} title="Comunidades" tipo="comunidades" />}
         </div>
@@ -200,15 +199,15 @@ export default function Home(props) {
 export async function getServerSideProps(context) {
   const cookies = nookies.get(context);
   const token = cookies.USER_TOKEN;
-  
+
 
   const { isAuthenticated } = await fetch('https://alurakut.vercel.app/api/auth', {
     headers: {
       "Authorization": token
     }
   }).then((response) => response.json())
-   
-  if(!isAuthenticated) {
+
+  if (!isAuthenticated) {
     return {
       redirect: {
         destination: '/login',
