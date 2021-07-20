@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import nookies from 'nookies';
-import { useRouter } from 'next/router';
 import jwt from 'jsonwebtoken';
 
 import Box from '../src/components/Box/Box';
 import BoxGroup from '../src/components/BoxGroup';
 import MainGrid from '../src/components/MainGrid/MainGrid';
 import ProfileSideBar from '../src/components/ProfileSideBar'
+import Testimonial from '../src/components/Testimonial';
 
 import { AlurakutMenu, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons';
 import { http } from '../src/services/http';
@@ -19,6 +19,7 @@ export default function Home(props) {
   const [seguidores, setSeguidores] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [comunidades, setComunidades] = useState([]);
+  const [recados, setRecados] = useState([]);
   const [title, setTitle] = useState('')
   const [urlImage, setUrlImage] = useState('')
   const [urlComunidade, setUrlComunidade] = useState('')
@@ -38,7 +39,6 @@ export default function Home(props) {
       .then((response) => {
         if (response.data) {
           const dados = response.data;
-          console.log(seguidores);
           dados.map(({ id, login, avatar_url }) => {
             remapSeguidor.push({
               id: id,
@@ -189,6 +189,9 @@ export default function Home(props) {
               </div>
               <button onClick={(e) => handleCriarComunidade(e)}>Criar comunidade</button>
             </form>
+          </Box>
+          <Box>
+            <Testimonial githubUser={githubUser} recados={ recados}/>
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>

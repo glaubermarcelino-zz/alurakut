@@ -5,8 +5,9 @@ const ProfileSideBar = (user) => {
   return (
     <Box as="aside">
       <>
-        <img src={`https://www.github.com/${user.githubUser}.png`} style={{ borderRadius: '60px' }} />
-
+        <a className="boxLink" href={`https://www.github.com/${user.githubUser}`}>
+          <img src={`https://www.github.com/${user.githubUser}.png`} style={{ borderRadius: '60px' }} />
+        </a>
         <hr />
         <p>
           <a className="boxLink" href={`https://www.github.com/${user.githubUser}`}>
