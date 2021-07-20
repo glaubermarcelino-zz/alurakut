@@ -28,8 +28,8 @@ export default function Home(props) {
   { id: 2, nome: "omariosouto", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/omariosouto.png` },
   { id: 3, nome: "rafaballerini", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/rafaballerini.png` },
   { id: 4, nome: "marcobrunodev", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/marcobrunodev.png` },
-    { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
-  
+  { id: 5, nome: "felipefialho", avatar: `${process.env.NEXT_PUBLIC_GITHUB}/felipefialho.png` }];
+
   const itemsPorPagina = 29;
 
   useEffect(() => {
@@ -79,7 +79,7 @@ export default function Home(props) {
       body: JSON.stringify(dados)
     }).then(async (response) => {
       const dadosretornados = await response.json();
-      const { createdAt, id, imageUrl, title, urlComunidade,sluguser } = dadosretornados.registroCriado;
+      const { createdAt, id, imageUrl, title, urlComunidade, sluguser } = dadosretornados.registroCriado;
 
       toast.success("Comunidade inserida com sucesso!")
       const retorno = {
@@ -191,7 +191,7 @@ export default function Home(props) {
             </form>
           </Box>
           <Box>
-            <Testimonial githubUser={githubUser} recados={ recados}/>
+            <Testimonial githubUser={githubUser} recados={recados} />
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
